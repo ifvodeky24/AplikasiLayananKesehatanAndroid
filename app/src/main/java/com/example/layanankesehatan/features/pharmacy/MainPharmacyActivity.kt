@@ -22,15 +22,15 @@ class MainPharmacyActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Data Klinik"
+        supportActionBar?.title = "Data Apotek"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
 
     private fun setupViewPager(viewPager: ViewPager?) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.fragment(PharmacyListFragment(), "Puskemas List")
-        adapter.fragment(PharmacyMapFragment(), "Puskemas Map")
+        adapter.fragment(PharmacyListFragment(), "Daftar Apotek")
+        adapter.fragment(PharmacyMapFragment(), "Apotek Map")
         viewPager?.adapter = adapter
         tabs.setupWithViewPager(viewPager)
     }

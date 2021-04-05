@@ -22,15 +22,15 @@ class MainPublicHeartActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Data Klinik"
+        supportActionBar?.title = "Data Puskesmas"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
 
     private fun setupViewPager(viewPager: ViewPager?) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.fragment(PublicHeartListFragment(), "Puskemas List")
-        adapter.fragment(PublicHeartMapFragment(), "Puskemas Map")
+        adapter.fragment(PublicHeartListFragment(), "Daftar Puskesmas")
+        adapter.fragment(PublicHeartMapFragment(), "Puskesmas Map")
         viewPager?.adapter = adapter
         tabs.setupWithViewPager(viewPager)
     }

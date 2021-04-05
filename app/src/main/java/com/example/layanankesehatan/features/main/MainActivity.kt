@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             val dialogBuilder = AlertDialog.Builder(this)
 
             // set message of alert dialog
-            dialogBuilder.setMessage("Dibuat oleh: Alex Swandi")
+            dialogBuilder.setMessage("Aplikasi pencarian pelayanan kesehatan untuk mempermudah masyarakat dalam mencari lokasi pelayanan kesehatan\n\nVersi 1.0")
                 // if the dialog is cancelable
 //                .setCancelable(false)
 //                // positive button text and action

@@ -29,7 +29,7 @@ class MainClinicActivity : AppCompatActivity() {
 
     private fun setupViewPager(viewPager: ViewPager?) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.fragment(ClinicListFragment(), "Klinik List")
+        adapter.fragment(ClinicListFragment(), "Daftar Klinik")
         adapter.fragment(ClinicMapFragment(), "Klinik Map")
         viewPager?.adapter = adapter
         tabs.setupWithViewPager(viewPager)

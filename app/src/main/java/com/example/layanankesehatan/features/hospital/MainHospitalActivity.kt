@@ -22,14 +22,14 @@ class MainHospitalActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Data Klinik"
+        supportActionBar?.title = "Data Rumah Sakit"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
 
     private fun setupViewPager(viewPager: ViewPager?) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.fragment(HospitalListFragment(), "Rumah Sakit List")
+        adapter.fragment(HospitalListFragment(), "Daftar Rumah Sakit")
         adapter.fragment(HospitalMapFragment(), "Rumah Sakit Map")
         viewPager?.adapter = adapter
         tabs.setupWithViewPager(viewPager)
