@@ -12,7 +12,6 @@ data class Pharmacy(
     @SerializedName("kabupaten") var kabupaten: String?,
     @SerializedName("alamat") var alamat: String?,
     @SerializedName("foto") var foto: String?,
-    @SerializedName("fasilitas") var fasilitas: String?,
     @SerializedName("deskripsi") var deskripsi: String?,
     @SerializedName("latitude") var latitude: String?,
     @SerializedName("longitude") var longitude: String?

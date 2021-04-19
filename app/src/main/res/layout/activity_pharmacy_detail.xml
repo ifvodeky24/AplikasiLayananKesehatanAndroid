@@ -98,44 +98,6 @@
                 android:layout_marginTop="@dimen/spacing_large"
                 android:background="@color/grey_10" />
 
-            <!--nutrition chart-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:minHeight="@dimen/spacing_mxlarge"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="Fasilitas" />
-
-                    <TextView
-                        android:id="@+id/tv_amenities_pharmacy"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="-" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/spacing_middle"
-                android:layout_marginTop="@dimen/spacing_middle"
-                android:background="@color/grey_10" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

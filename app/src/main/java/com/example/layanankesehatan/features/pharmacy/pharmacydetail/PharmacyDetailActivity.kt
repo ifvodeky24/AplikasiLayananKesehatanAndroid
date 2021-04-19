@@ -34,7 +34,6 @@ class PharmacyDetailActivity : AppCompatActivity() {
     lateinit var village: String
     lateinit var address: String
     lateinit var image: String
-    lateinit var amenities: String
     lateinit var desc: String
     lateinit var latitude: String
     lateinit var longitude: String
@@ -125,7 +124,6 @@ class PharmacyDetailActivity : AppCompatActivity() {
         tv_name_pharmacy.text = name
         tv_desc_pharmacy.text = desc
         tv_address_pharmacy.text = " ${district}, ${village}, ${address}"
-        tv_amenities_pharmacy.text = amenities
         Glide.with(this)
             .load(ServerConfig.PHARMACY_PATH+image)
             .apply(RequestOptions().placeholder(R.drawable.ic_hourglass_empty_black_24dp))
@@ -147,7 +145,6 @@ class PharmacyDetailActivity : AppCompatActivity() {
         village = pharmacy.kabupaten.toString()
         address = pharmacy.alamat.toString()
         image = pharmacy.foto.toString()
-        amenities = pharmacy.fasilitas.toString()
         desc = pharmacy.deskripsi.toString()
         latitude = pharmacy.latitude.toString()
         longitude = pharmacy.longitude.toString()

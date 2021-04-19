@@ -135,7 +135,6 @@ class PharmacyMapFragment : Fragment(), OnMapReadyCallback, PharmacyContract.Vie
                 pharmacys[index].kabupaten!!,
                 pharmacys[index].alamat!!,
                 pharmacys[index].foto!!,
-                pharmacys[index].fasilitas!!,
                 pharmacys[index].deskripsi!!,
                 pharmacys[index].latitude!!,
                 pharmacys[index].longitude!!
