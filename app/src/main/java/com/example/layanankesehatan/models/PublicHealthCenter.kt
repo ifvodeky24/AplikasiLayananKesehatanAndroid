@@ -13,7 +13,7 @@ data class PublicHealthCenter(
     @SerializedName("alamat") var alamat: String?,
     @SerializedName("nomor_telp") var nomor_telp: String?,
     @SerializedName("foto") var foto: String?,
-    @SerializedName("fasilitas") var fasilitas: String?,
+    @SerializedName("jenis_puskesmas") var jenis_puskesmas: String?,
     @SerializedName("deskripsi") var deskripsi: String?,
     @SerializedName("latitude") var latitude: String?,
     @SerializedName("longitute") var longitute: String?

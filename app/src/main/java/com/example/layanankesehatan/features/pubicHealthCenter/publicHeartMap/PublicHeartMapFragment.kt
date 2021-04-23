@@ -136,7 +136,7 @@ class PublicHeartMapFragment : Fragment(), OnMapReadyCallback, PublicHealthCente
                 phc[index].alamat!!,
                 phc[index].nomor_telp!!,
                 phc[index].foto!!,
-                phc[index].fasilitas!!,
+                phc[index].jenis_puskesmas!!,
                 phc[index].deskripsi!!,
                 phc[index].latitude!!,
                 phc[index].longitute!!

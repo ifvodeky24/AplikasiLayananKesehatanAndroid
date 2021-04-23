@@ -138,7 +138,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Fasilitas" />
+                        android:text="Jenis Puskesmas" />
 
                     <TextView
                         android:id="@+id/tv_amenities_phc"

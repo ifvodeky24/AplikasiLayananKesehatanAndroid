@@ -150,7 +150,7 @@ class PublicHealthCenterDetailActivity : AppCompatActivity() {
         address = phc.alamat.toString()
         handphone = phc.nomor_telp.toString()
         image = phc.foto.toString()
-        amenities = phc.fasilitas.toString()
+        amenities = phc.jenis_puskesmas.toString()
         desc = phc.deskripsi.toString()
         latitude = phc.latitude.toString()
         longitude = phc.longitute.toString()
