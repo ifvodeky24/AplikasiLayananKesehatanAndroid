@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.layanankesehatan.R
 import com.example.layanankesehatan.features.doktorpractice.DoctorPracticeContract
 import com.example.layanankesehatan.features.doktorpractice.DoctorPracticePresenter
 import com.example.layanankesehatan.features.doktorpractice.doctorpracticedetail.DoctorPracticeDetailActivity
+import com.example.layanankesehatan.models.Clinic
 import com.example.layanankesehatan.models.DoctorPractice
 import com.example.layanankesehatan.repositories.DoctorPracticeRepositoryImp
 import com.example.layanankesehatan.rest.HealthApiService
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -40,6 +43,7 @@ class DoctorPracticeMapFragment : Fragment(), OnMapReadyCallback, DoctorPractice
 
     lateinit var mPresenter: DoctorPracticePresenter
     private lateinit var doctorPractice: DoctorPractice
+    private val doctorPracticeList by lazy { ArrayList<DoctorPractice>() }
 
     private var latitude: Double? = null
     private var longitude: Double? = null
@@ -95,13 +99,19 @@ class DoctorPracticeMapFragment : Fragment(), OnMapReadyCallback, DoctorPractice
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
-        mMap.setMinZoomPreference(15f)
 
-        // Add a marker and move the camera
-        val location = LatLng(latitude!!.toDouble(), longitude!!.toDouble())
-        mMap.addMarker(MarkerOptions().position(location).title(placeName))
+//        mMap.setMinZoomPreference(15f)
+
+        Log.d("ff ddd", "cek ${Gson().toJson(doctorPracticeList)}")
+
+        for (i in doctorPracticeList.indices){
+            Log.d("ff ddd", "cek jumlah ${doctorPracticeList[i]}")
+            val location = LatLng(doctorPracticeList[i].latitude!!.toDouble(), doctorPracticeList[i].longitute!!.toDouble())
+            mMap.addMarker(MarkerOptions().position(location).title(doctorPracticeList[i].nama_dokter_praktek!!))
+        }
+
         mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(0.356319, 100.118494)))
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isCompassEnabled = true
 
@@ -122,7 +132,7 @@ class DoctorPracticeMapFragment : Fragment(), OnMapReadyCallback, DoctorPractice
     }
 
     override fun displayDp(doctorPractices: List<DoctorPractice>) {
-        for (index in 0 until doctorPractices.size){
+        for (index in doctorPractices.indices){
             latitude = doctorPractices[index].latitude!!
             longitude = doctorPractices[index].longitute!!
             placeName = doctorPractices[index].nama_dokter_praktek!!
@@ -140,10 +150,11 @@ class DoctorPracticeMapFragment : Fragment(), OnMapReadyCallback, DoctorPractice
                 doctorPractices[index].longitute!!
             )
 
-            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-
+            doctorPracticeList.add(doctorPractices[index])
         }
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     private fun initEnv() {

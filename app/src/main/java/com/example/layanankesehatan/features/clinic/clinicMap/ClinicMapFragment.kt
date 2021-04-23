@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.example.layanankesehatan.features.clinic.ClinicContract
 import com.example.layanankesehatan.features.clinic.clinicDetail.ClinicDetailActivity
 import com.example.layanankesehatan.features.clinic.clinicList.ClinicListPresenter
 import com.example.layanankesehatan.models.Clinic
+import com.example.layanankesehatan.models.PublicHealthCenter
 import com.example.layanankesehatan.repositories.ClinicRepositoryImp
 import com.example.layanankesehatan.rest.HealthApiService
 import com.example.layanankesehatan.rest.HealthRest
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -39,6 +42,7 @@ class ClinicMapFragment : Fragment(), OnMapReadyCallback, ClinicContract.View {
 
     lateinit var mPresenter: ClinicListPresenter
     private lateinit var clinics: Clinic
+    private val clinicsList by lazy { ArrayList<Clinic>() }
 
     private var latitude: String? = null
     private var longitude: String? = null
@@ -101,13 +105,19 @@ class ClinicMapFragment : Fragment(), OnMapReadyCallback, ClinicContract.View {
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
-        mMap.setMinZoomPreference(15f)
 
-        // Add a marker and move the camera
-        val location = LatLng(latitude!!.toDouble(), longitude!!.toDouble())
-        mMap.addMarker(MarkerOptions().position(location).title(placeName))
+//        mMap.setMinZoomPreference(15f)
+
+        Log.d("ff ddd", "cek ${Gson().toJson(clinicsList)}")
+
+        for (i in clinicsList.indices){
+            Log.d("ff ddd", "cek jumlah ${clinicsList[i]}")
+            val location = LatLng(clinicsList[i].latitude!!.toDouble(), clinicsList[i].longitute!!.toDouble())
+            mMap.addMarker(MarkerOptions().position(location).title(clinicsList[i].nama_klinik!!))
+        }
+
         mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(0.356319, 100.118494)))
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isCompassEnabled = true
 
@@ -129,7 +139,7 @@ class ClinicMapFragment : Fragment(), OnMapReadyCallback, ClinicContract.View {
 
     override fun displayClinics(clinic: List<Clinic>) {
 
-        for (index in 0 until clinic.size){
+        for (index in clinic.indices){
             latitude = clinic[index].latitude!!
             longitude = clinic[index].longitute!!
             placeName = clinic[index].nama_klinik!!
@@ -147,10 +157,12 @@ class ClinicMapFragment : Fragment(), OnMapReadyCallback, ClinicContract.View {
                 clinic[index].longitute!!
             )
 
-            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-
+            clinicsList.add(clinic[index])
         }
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
     }
 
     private fun initEnv() {

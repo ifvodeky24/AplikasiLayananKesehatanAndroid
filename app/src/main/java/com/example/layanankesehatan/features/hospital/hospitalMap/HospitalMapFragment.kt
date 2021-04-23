@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.layanankesehatan.features.hospital.HospitalContract
 import com.example.layanankesehatan.features.hospital.HospitalPresenter
 import com.example.layanankesehatan.features.hospital.hospitaldetail.HospitalDetailActivity
 import com.example.layanankesehatan.models.Hospital
+import com.example.layanankesehatan.models.Pharmacy
 import com.example.layanankesehatan.repositories.HospitalRepositoryImp
 import com.example.layanankesehatan.rest.HealthApiService
 import com.example.layanankesehatan.rest.HealthRest
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -40,6 +43,7 @@ class HospitalMapFragment : Fragment(), OnMapReadyCallback, HospitalContract.Vie
 
     lateinit var mPresenter: HospitalPresenter
     private lateinit var hospital: Hospital
+    private val hospitalList by lazy { ArrayList<Hospital>() }
 
     private var latitude: Double? = null
     private var longitude: Double? = null
@@ -95,13 +99,18 @@ class HospitalMapFragment : Fragment(), OnMapReadyCallback, HospitalContract.Vie
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
-        mMap.setMinZoomPreference(15f)
+//        mMap.setMinZoomPreference(15f)
 
-        // Add a marker and move the camera
-        val location = LatLng(latitude!!.toDouble(), longitude!!.toDouble())
-        mMap.addMarker(MarkerOptions().position(location).title(placeName))
+        Log.d("ff ddd", "cek ${Gson().toJson(hospitalList)}")
+
+        for (i in hospitalList.indices){
+            Log.d("ff ddd", "cek jumlah ${hospitalList[i]}")
+            val location = LatLng(hospitalList[i].latitude!!.toDouble(), hospitalList[i].longitude!!.toDouble())
+            mMap.addMarker(MarkerOptions().position(location).title(hospitalList[i].nama_rumah_sakit!!))
+        }
+
         mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(0.356319, 100.118494)))
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isCompassEnabled = true
 
@@ -122,7 +131,7 @@ class HospitalMapFragment : Fragment(), OnMapReadyCallback, HospitalContract.Vie
     }
 
     override fun displayHospitals(hospitals: List<Hospital>) {
-        for (index in 0 until hospitals.size){
+        for (index in hospitals.indices){
             latitude = hospitals[index].latitude!!
             longitude = hospitals[index].longitude!!
             placeName = hospitals[index].nama_rumah_sakit!!
@@ -141,10 +150,12 @@ class HospitalMapFragment : Fragment(), OnMapReadyCallback, HospitalContract.Vie
                 hospitals[index].longitude!!
             )
 
-            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
+            hospitalList.add(hospitals[index])
 
         }
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     private fun initEnv() {

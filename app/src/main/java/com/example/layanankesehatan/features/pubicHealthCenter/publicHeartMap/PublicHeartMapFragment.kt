@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.layanankesehatan.features.pubicHealthCenter.PublicHealthCente
 import com.example.layanankesehatan.features.pubicHealthCenter.PublicHealthCenterContract
 import com.example.layanankesehatan.features.pubicHealthCenter.PublicHealthCenterPresenter
 import com.example.layanankesehatan.features.pubicHealthCenter.publicHealthCenterDetail.PublicHealthCenterDetailActivity
+import com.example.layanankesehatan.models.Hospital
 import com.example.layanankesehatan.models.PublicHealthCenter
 import com.example.layanankesehatan.repositories.PublicHealthCenterRepositoryImp
 import com.example.layanankesehatan.rest.HealthApiService
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -41,6 +44,7 @@ class PublicHeartMapFragment : Fragment(), OnMapReadyCallback, PublicHealthCente
 
     lateinit var mPresenter: PublicHealthCenterPresenter
     private lateinit var publicHeart: PublicHealthCenter
+    private val publicHeartList by lazy { ArrayList<PublicHealthCenter>() }
 
     private var latitude: String? = null
     private var longitude: String? = null
@@ -96,13 +100,18 @@ class PublicHeartMapFragment : Fragment(), OnMapReadyCallback, PublicHealthCente
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
-        mMap.setMinZoomPreference(15f)
+//        mMap.setMinZoomPreference(15f)
 
-        // Add a marker and move the camera
-        val location = LatLng(latitude!!.toDouble(), longitude!!.toDouble())
-        mMap.addMarker(MarkerOptions().position(location).title(placeName))
+        Log.d("ff ddd", "cek ${Gson().toJson(publicHeartList)}")
+
+        for (i in publicHeartList.indices){
+            Log.d("ff ddd", "cek jumlah ${publicHeartList[i]}")
+            val location = LatLng(publicHeartList[i].latitude!!.toDouble(), publicHeartList[i].longitute!!.toDouble())
+            mMap.addMarker(MarkerOptions().position(location).title(publicHeartList[i].nama_puskesmas!!))
+        }
+
         mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(0.356319, 100.118494)))
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isCompassEnabled = true
 
@@ -123,7 +132,7 @@ class PublicHeartMapFragment : Fragment(), OnMapReadyCallback, PublicHealthCente
     }
 
     override fun displayPhc(phc: List<PublicHealthCenter>) {
-        for (index in 0 until phc.size){
+        for (index in phc.indices){
             latitude = phc[index].latitude!!
             longitude = phc[index].longitute!!
             placeName = phc[index].nama_puskesmas!!
@@ -142,10 +151,11 @@ class PublicHeartMapFragment : Fragment(), OnMapReadyCallback, PublicHealthCente
                 phc[index].longitute!!
             )
 
-            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-
+            publicHeartList.add(phc[index])
         }
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     private fun initEnv() {

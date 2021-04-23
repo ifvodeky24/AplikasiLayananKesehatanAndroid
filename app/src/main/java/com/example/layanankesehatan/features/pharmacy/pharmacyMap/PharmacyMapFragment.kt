@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -40,6 +42,7 @@ class PharmacyMapFragment : Fragment(), OnMapReadyCallback, PharmacyContract.Vie
 
     lateinit var mPresenter: PharmacyPresenter
     private lateinit var pharmacy: Pharmacy
+    private val pharmacyList by lazy { ArrayList<Pharmacy>() }
 
     private var latitude: String? = null
     private var longitude: String? = null
@@ -51,11 +54,14 @@ class PharmacyMapFragment : Fragment(), OnMapReadyCallback, PharmacyContract.Vie
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view= inflater.inflate(R.layout.fragment_pharmacy_map, container, false)
+
+        return inflater.inflate(R.layout.fragment_pharmacy_map, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initEnv()
-
-        return view
     }
 
     private fun checkPermissions() {
@@ -96,13 +102,17 @@ class PharmacyMapFragment : Fragment(), OnMapReadyCallback, PharmacyContract.Vie
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
 
-        mMap.setMinZoomPreference(15f)
+//        mMap.setMinZoomPreference(15f)
 
-        // Add a marker and move the camera
-        val location = LatLng(latitude!!.toDouble(), longitude!!.toDouble())
-        mMap.addMarker(MarkerOptions().position(location).title(placeName))
+        Log.d("ff ddd", "cek ${Gson().toJson(pharmacyList)}")
+
+        for (i in pharmacyList.indices){
+            val location = LatLng(pharmacyList[i].latitude!!.toDouble(), pharmacyList[i].longitude!!.toDouble())
+            mMap.addMarker(MarkerOptions().position(location).title(pharmacyList[i].nama_apotek!!))
+        }
+
         mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(0.356319, 100.118494)))
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isCompassEnabled = true
 
@@ -123,7 +133,7 @@ class PharmacyMapFragment : Fragment(), OnMapReadyCallback, PharmacyContract.Vie
     }
 
     override fun displayPharmacy(pharmacys: List<Pharmacy>) {
-        for (index in 0 until pharmacys.size){
+        for (index in pharmacys.indices){
             latitude = pharmacys[index].latitude!!
             longitude = pharmacys[index].longitude!!
             placeName = pharmacys[index].nama_apotek!!
@@ -140,10 +150,13 @@ class PharmacyMapFragment : Fragment(), OnMapReadyCallback, PharmacyContract.Vie
                 pharmacys[index].longitude!!
             )
 
-            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-
+            pharmacyList.add(pharmacys[index])
         }
+
+        Log.d("ff", "cek ${Gson().toJson(pharmacyList)}")
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     private fun initEnv() {
